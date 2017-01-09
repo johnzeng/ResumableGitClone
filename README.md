@@ -8,8 +8,20 @@ Clone a large repo without retrying again and again.
 - `./rgit.sh [git repo url]`
 - sip tee
 
-you can also put `rgit.sh` to your $PATH dir, so you don't need to open this repo to call this command
+you can also put `rgit.sh` to your $PATH, so you don't need to open this repo to call this command
 
+## how to resume
+
+if you happened to stop this script ,and you wanna restart the clone,
+
+- `cd` to the dir of your repo
+- run `rgit.sh` (so I suggest you to add rgit.sh to your $PATH)
+
+
+## tricky files
+
+- rgit.out  -> used to record the git output, so rgit can know if the fetch is done or not
+- .resumable_git_depth -> used to record the git fetched depth, so rgit can know where to start from. This file is necessary if you wanna resume the clone.
 
 ## Sample output
 

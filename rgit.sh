@@ -1,29 +1,39 @@
 #!/bin/bash
 
+DEPTH_RECORD_FILE=.resumable_git_depth
+OUT_FILE=rgit.out
+
 if [ 0 -eq $# ]
 then
-    echo "use: $0 [clone url]"
-    exit 1
-fi
-
-echo "now clone one layer"
-clone_str=`git clone --depth 1 $1 2>&1|grep Cloning`
-[[ "$clone_str" =~ \'(.*)\' ]] && work_dir=${BASH_REMATCH[1]}
-
-if [[ "$work_dir" == "" ]]
+    depth=`cat ${DEPTH_RECORD_FILE}`
+    if [[ "" == $depth ]]
+    then
+        echo "can not find resume record in current dir"
+        exit 1
+    fi
+elif [ 1 -eq $# ]
 then
-    echo "fail to clone"
-    exit 1
+    echo "now clone the 1st layer"
+    clone_str=`git clone --depth 1 $1 2>&1|grep Cloning`
+    [[ "$clone_str" =~ \'(.*)\' ]] && work_dir=${BASH_REMATCH[1]}
+
+    if [[ "$work_dir" == "" ]]
+    then
+        echo "fail to clone"
+        exit 1
+    fi
+
+    cd $work_dir
+    depth=2
 fi
 
-cd $work_dir
-depth=2
 step=1
 
 while true
 do
+    echo ${depth} > $DEPTH_RECORD_FILE
     echo "fetch depth $depth"
-    git fetch --depth $depth --progress  2>../rgit.out
+    git fetch --depth $depth --progress  2>$OUT_FILE
     if [ 0 -eq $? ]
     then
         step=$depth
@@ -37,12 +47,11 @@ do
         fi
     fi
 
-    cat ../rgit.out | grep "remote: Total 0 (delta 0), reused 0 (delta 0), pack-reused 0" 
+    cat $OUT_FILE | grep "remote: Total 0 (delta 0), reused 0 (delta 0), pack-reused 0" 
 
     if [ 0 -eq $? ]
     then
         echo 'fetch over'
-        rm ../rgit.out
         break
     fi
 done
@@ -51,3 +60,5 @@ done
 echo 'now fetch branches'
 git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"; git fetch origin
 echo 'done ^_^'
+rm $OUT_FILE
+rm $DEPTH_RECORD_FILE
