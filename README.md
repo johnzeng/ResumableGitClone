@@ -20,8 +20,9 @@ if you happened to stop this script ,and you wanna restart the clone,
 
 ## tricky files
 
-- rgit.out  -> used to record the git output, so rgit can know if the fetch is done or not
-- .resumable_git_depth -> used to record the git fetched depth, so rgit can know where to start from. This file is necessary if you wanna resume the clone.
+To make this script works, I will create the following files in the cloned repo directory to record the process.
+- rgit.out  -> used to record the git output, so rgit can know if the fetch is done or not (You can delete it if you interrupt the process, the script will create a new one, nothing goes wrong)
+- .resumable_git_depth -> used to record the git fetched depth, so rgit can know where to start from. This file is necessary if you wanna resume the clone. (deleting this file will stop this script from resuming the clone.You can of course set up a custom depth in this file to continue the clone by yourself)
 
 ## Sample output
 
