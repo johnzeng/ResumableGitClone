@@ -28,7 +28,7 @@ then
 fi
 
 step=1
-
+done_time=0
 while true
 do
     echo ${depth} > $DEPTH_RECORD_FILE
@@ -51,8 +51,17 @@ do
 
     if [ 0 -eq $? ]
     then
-        echo 'fetch over'
-        break
+        ## should move 2 times over
+        echo 'maybe fetch over'
+        if [ 2 -eq  $done_time ]
+        then
+            echo 'fetch over'
+            break
+        else
+            done_time=`expr $done_time + 1`
+        fi
+    else
+        done_time=0
     fi
 done
 
