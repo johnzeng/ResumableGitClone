@@ -1,11 +1,11 @@
-## Resumable git clone
+# Resumable git clone
 
 Clone a large repo without retrying again and again.
 
 ## how to use
 
 - clone this repo or just download the rgit.sh file into your pc
-- `./rgit.sh [git repo url]`
+- `./rgit.sh [-h|--help] [git_repo_url [dir] [...git_clone_options]]`
 - sip tee
 
 you can also put `rgit.sh` to your $PATH, so you don't need to open this repo to call this command
@@ -17,10 +17,10 @@ if you happened to stop this script ,and you wanna restart the clone,
 - `cd` to the dir of your repo
 - run `rgit.sh` (so I suggest you to add rgit.sh to your $PATH)
 
-
 ## tricky files
 
 To make this script works, I will create the following files in the cloned repo directory to record the process.
+
 - rgit.out  -> used to record the git output, so rgit can know if the fetch is done or not (You can delete it if you interrupt the process, the script will create a new one, nothing goes wrong)
 - .resumable_git_depth -> used to record the git fetched depth, so rgit can know where to start from. This file is necessary if you wanna resume the clone. (deleting this file will stop this script from resuming the clone.You can of course set up a custom depth in this file to continue the clone by yourself)
 
@@ -28,7 +28,7 @@ To make this script works, I will create the following files in the cloned repo 
 
 This is the output about how it works when I try to clone redis from github. It's really a hard fight, you can't image how much work you will have to do if you do it manually
 
-```
+```shell
 rgit https://github.com/antirez/redis.git
 now clone one layer
 fetch depth 2
